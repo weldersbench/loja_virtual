@@ -2,6 +2,7 @@ package br.com.loja_virtual.model;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +19,8 @@ public class MarcaProduto implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_marca_produto") // Define a estrategia do SequenceGenerator
 	private Long id;
+	
+	@Column(nullable = false) // Esse parametro define que o campo descrição produto não pode ser vazio ou null, obrigatorio preencher.
 	private String nomeDesc;
 	
 	public Long getId() {
