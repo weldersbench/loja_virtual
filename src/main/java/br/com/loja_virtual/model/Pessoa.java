@@ -31,14 +31,14 @@ public abstract class Pessoa implements Serializable {
 	private String email;
 	private String telefone;
 	
-	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY) // 1 para muitos
 	/*
 	 mappedBy = Faz o mapeamento para o objeto pessoa, na classe endereço.
 	 orphanRemoval = Se apagar uma pessoa, os endereços são apagados também.
 	 cascade = Cadastrar ou remover, ele realiza de forma cascata.
 	 fetch = Só vai carregar os endereços quando for dado um get no endereço.
 	 */
-	private List<Endereco> enderecos = new ArrayList<>();
+	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY) // 1 para muitos
+	private List<Endereco> enderecos = new ArrayList<Endereco>();
 	
 	public List<Endereco> getEnderecos() {
 		return enderecos;

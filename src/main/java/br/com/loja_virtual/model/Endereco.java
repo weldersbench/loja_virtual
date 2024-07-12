@@ -3,9 +3,12 @@ package br.com.loja_virtual.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import br.com.loja_virtual.enums.TipoEndereco;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,6 +39,17 @@ public class Endereco implements Serializable{
 	@ManyToOne(targetEntity = Pessoa.class) // Muitos para 1, passando qual é a classe.
 	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk")) // Cria a chave estrangeira
 	private Pessoa pessoa;
+	
+	@Enumerated(EnumType.STRING) // O jpa trabalho com a gravação com a descrição feita no enum.
+	private TipoEndereco tipoEndereco;
+	
+	public void setTipoEndereco(TipoEndereco tipoEndereco) {
+		this.tipoEndereco = tipoEndereco;
+	}
+	
+	public TipoEndereco getTipoEndereco() {
+		return tipoEndereco;
+	}
 
 	public Long getId() {
 		return id;
