@@ -5,13 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
-import br.com.loja_virtual.enums.StatusContaReceber;
-import br.com.loja_virtual.enums.TipoEndereco;
-import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,119 +19,120 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
 @Entity
-@Table(name = "conta_receber") // Indicar o nome da tabela.
-@SequenceGenerator(name = "seq_conta_receber", sequenceName = "seq_conta_receber", allocationSize = 1, initialValue = 1) // Define uma sequencia nas alterações das tabelas.
-public class ContaReceber implements Serializable{
+@Table(name = "nota_fiscal_compra")
+@SequenceGenerator(name = "seq_nota_fiscal_compra", sequenceName = "seq_nota_fiscal_compra", allocationSize = 1, initialValue = 1)
+public class NotaFiscalCompra implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_conta_receber") // Define a estrategia do SequenceGenerator
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_nota_fiscal_compra")
 	private Long id;
 	
-	private String descricao;
-	
-	@Enumerated(EnumType.STRING) // o tipo que vai trabalhar é string
-	private StatusContaReceber status;
-	
-	@Temporal(TemporalType.DATE)
-	private Date dtVencimento;
-	@Temporal(TemporalType.DATE)
-	private Date dtPagamento;
-	
+	private String numeroNota;
+	private String serieNota;
+	private String descricaoObs;
 	private BigDecimal valorTotal;
 	private BigDecimal valorDesconto;
+	private BigDecimal valorICMS;
 	
-	/* ASSOCIAÇÃO A ENTIDADE PESSOA */
+	@Temporal(TemporalType.DATE)
+	private Date dataCompra;
+	
 	@ManyToOne(targetEntity = Pessoa.class) // Muitos para 1, passando qual é a classe.
-	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk")) // Cria a chave estrangeira
+	@JoinColumn(name = "pessoa_id", nullable = false, 
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
 	private Pessoa pessoa;
-
+	
+	@ManyToOne
+	@JoinColumn(name = "conta_pagar_id", nullable = false, 
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "conta_pagar_fk"))
+	private ContaPagar contaPagar;
 
 	public Long getId() {
 		return id;
 	}
 
-
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
-	public String getDescricao() {
-		return descricao;
+	public String getNumeroNota() {
+		return numeroNota;
 	}
 
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setNumeroNota(String numeroNota) {
+		this.numeroNota = numeroNota;
 	}
 
-
-	public StatusContaReceber getStatus() {
-		return status;
+	public String getSerieNota() {
+		return serieNota;
 	}
 
-
-	public void setStatus(StatusContaReceber status) {
-		this.status = status;
+	public void setSerieNota(String serieNota) {
+		this.serieNota = serieNota;
 	}
 
-
-	public Date getDtVencimento() {
-		return dtVencimento;
+	public String getDescricaoObs() {
+		return descricaoObs;
 	}
 
-
-	public void setDtVencimento(Date dtVencimento) {
-		this.dtVencimento = dtVencimento;
+	public void setDescricaoObs(String descricaoObs) {
+		this.descricaoObs = descricaoObs;
 	}
-
-
-	public Date getDtPagamento() {
-		return dtPagamento;
-	}
-
-
-	public void setDtPagamento(Date dtPagamento) {
-		this.dtPagamento = dtPagamento;
-	}
-
 
 	public BigDecimal getValorTotal() {
 		return valorTotal;
 	}
 
-
 	public void setValorTotal(BigDecimal valorTotal) {
 		this.valorTotal = valorTotal;
 	}
-
 
 	public BigDecimal getValorDesconto() {
 		return valorDesconto;
 	}
 
-
 	public void setValorDesconto(BigDecimal valorDesconto) {
 		this.valorDesconto = valorDesconto;
 	}
 
+	public BigDecimal getValorICMS() {
+		return valorICMS;
+	}
+
+	public void setValorICMS(BigDecimal valorICMS) {
+		this.valorICMS = valorICMS;
+	}
+
+	public Date getDataCompra() {
+		return dataCompra;
+	}
+
+	public void setDataCompra(Date dataCompra) {
+		this.dataCompra = dataCompra;
+	}
 
 	public Pessoa getPessoa() {
 		return pessoa;
 	}
 
-
 	public void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
 	}
 
+	public ContaPagar getContaPagar() {
+		return contaPagar;
+	}
+
+	public void setContaPagar(ContaPagar contaPagar) {
+		this.contaPagar = contaPagar;
+	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -146,10 +142,10 @@ public class ContaReceber implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ContaReceber other = (ContaReceber) obj;
+		NotaFiscalCompra other = (NotaFiscalCompra) obj;
 		return Objects.equals(id, other.id);
 	}
 	
 	
-	
+
 }
