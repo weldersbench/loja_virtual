@@ -16,6 +16,7 @@ public class PessoaJuridica extends Pessoa {
 	@Column(nullable = false)
 	private String inscEstadual;
 	private String inscMunicipal;
+	@Column(nullable = false)
 	private String nomeFantasia;
 	@Column(nullable = false)
 	private String razaoSocial;

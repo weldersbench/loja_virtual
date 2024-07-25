@@ -5,10 +5,14 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -23,22 +27,36 @@ public class Produto implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_produto")
 	private Long id;
 	
+	@Column(nullable = false)
 	private String tipoUnidade;
+	@Column(nullable = false)
 	private String nome;
+	@Column(nullable = false)
 	private Boolean ativo = Boolean.TRUE;
 	
 	/* por padrão é criado no banco de dados, com um tamanho limite de 255, 
 	 * como este campo pode necessitar de um tamanho maior é preciso especificar colocando essa anotação*/
-	@Column(columnDefinition = "text", length = 2000)
+	@Column(columnDefinition = "text", length = 2000, nullable = false)
 	private String descricao;
 	
 	/**NOTA ITEM PRODUTO - ASSOCIAR**/
 	
+	@ManyToOne
+	@JoinColumn(name = "nota_item_produto_id", nullable = false, 
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "nota_item_produto_fk"))
+	private NotaITemProduto notaItemProduto;
+	
+	@Column(nullable = false)
 	private Double peso;
+	@Column(nullable = false)
 	private Double largura;
+	@Column(nullable = false)
 	private Double altura;
+	@Column(nullable = false)
 	private Double profundidade;
+	@Column(nullable = false)
 	private BigDecimal valorVenda = BigDecimal.ZERO;
+	@Column(nullable = false)
 	private Integer qtdEstoque = 0;
 	private Integer qtdAlertaEstoque = 0;
 	private String linkYoutube;
@@ -51,6 +69,14 @@ public class Produto implements Serializable {
 	
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+	
+	public NotaITemProduto getNotaItemProduto() {
+		return notaItemProduto;
+	}
+	
+	public void setNotaItemProduto(NotaITemProduto notaItemProduto) {
+		this.notaItemProduto = notaItemProduto;
 	}
 	
 	public Long getId() {

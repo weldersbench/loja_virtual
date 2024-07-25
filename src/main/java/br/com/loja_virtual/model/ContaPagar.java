@@ -34,12 +34,16 @@ public class ContaPagar implements Serializable{
 	private Long id;
 	
 	private String descricao;
+	
+	@Column(nullable = false)
 	private BigDecimal valorTotal;
 	private BigDecimal valorDesconto;
 	
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING) // o tipo que vai trabalhar é string
 	private StatusContaPagar status;
 	
+	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date dtVencimento;
 	

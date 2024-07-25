@@ -28,18 +28,30 @@ public class Endereco implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_endereco") // Define a estrategia do SequenceGenerator
 	private Long id;
 	
+	@Column(nullable = false)
 	private String ruaLogra;
+	
+	@Column(nullable = false)
 	private String cep;
+	
+	@Column(nullable = false)
 	private String numero;
 	private String complemento;
+	
+	@Column(nullable = false)
 	private String bairro;
+	
+	@Column(nullable = false)
 	private String uf;
+	
+	@Column(nullable = false)
 	private String cidade;
 	
 	@ManyToOne(targetEntity = Pessoa.class) // Muitos para 1, passando qual é a classe.
 	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk")) // Cria a chave estrangeira
 	private Pessoa pessoa;
 	
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING) // O jpa trabalho com a gravação com a descrição feita no enum.
 	private TipoEndereco tipoEndereco;
 	
