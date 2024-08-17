@@ -20,5 +20,10 @@ public class AcessoService {
 		/*Retorna para a variavel do repository, para persistir o acesso no banco e salvar*/
 		return acessoRepository.save(acesso);
 	}
+	
+	
+	public void delete(Acesso acesso) {
+		acessoRepository.deleteById(acesso.getId());;
+	}
 
 }
