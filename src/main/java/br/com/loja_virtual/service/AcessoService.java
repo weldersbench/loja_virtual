@@ -1,5 +1,7 @@
 package br.com.loja_virtual.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,18 @@ public class AcessoService {
 	
 	public void delete(Acesso acesso) {
 		acessoRepository.deleteById(acesso.getId());;
+	}
+	
+	public void deleteById(Long id) {
+		acessoRepository.deleteById(id);
+	}
+	
+	public Acesso buscarAcesso(Long id) {
+		return acessoRepository.findById(id).get();
+	}
+	
+	public List<Acesso> buscarPorDesc(String dec){
+		return acessoRepository.buscarAcessoDesc(dec);
 	}
 
 }
