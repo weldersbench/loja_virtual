@@ -35,6 +35,9 @@ public abstract class Pessoa implements Serializable {
 	@Column(nullable = false)
 	private String telefone;
 	
+	@Column
+	private String tipoPessoa;
+	
 	/*
 	 mappedBy = Faz o mapeamento para o objeto pessoa, na classe endereço.
 	 orphanRemoval = Se apagar uma pessoa, os endereços são apagados também.
@@ -49,6 +52,14 @@ public abstract class Pessoa implements Serializable {
 	}
 	public void setEnderecos(List<Endereco> enderecos) {
 		this.enderecos = enderecos;
+	}
+	
+	public void setTipoPessoa(String tipoPessoa) {
+		this.tipoPessoa = tipoPessoa;
+	}
+	
+	public String getTipoPessoa() {
+		return tipoPessoa;
 	}
 	
 	public Long getId() {
