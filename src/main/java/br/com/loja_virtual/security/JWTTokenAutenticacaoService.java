@@ -24,7 +24,7 @@ public class JWTTokenAutenticacaoService {
 	/*Token de validade de 11 dias*/
 	private static final long EXPIRATION_TIME = 959990000;
 	/*Chave de senha para juntar com o JWT*/
-	private static final String SECRET = "";
+	private static final String SECRET = "ss/-*-*sds565dsd-s/d-s*dsds";
 	/*O prefixo do tipo do Token*/
 	private static final String TOKEN_PREFIX = "Bearer";
 	/*Cabeçalho da requisição*/
@@ -42,6 +42,7 @@ public class JWTTokenAutenticacaoService {
 		String token = TOKEN_PREFIX + " " + JWT;
 		/*Dá a resposta para a tela e para o cliente, sendo: outra API, navegador, aplicativo, javascript, outra chamada java*/
 		response.addHeader(HEADER_STRING, token);
+		response.addHeader("Content-Type", "application/json");
 		
 		libaracaoCors(response);
 		
@@ -58,21 +59,27 @@ public class JWTTokenAutenticacaoService {
 			/*Retira o "Bearer" do inicio do token, devido ele precisar vim limpo*/
 			String tokenLimpo = token.replace(TOKEN_PREFIX, "").trim();
 			
-			/*Faz a validação do token do usuario na requisicao e obtem o USER*/
-			String user = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(tokenLimpo).getBody().getSubject();
-			
-			if(user != null) {
+			try {
+				/*Faz a validação do token do usuario na requisicao e obtem o USER*/
+				String user = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(tokenLimpo).getBody().getSubject();
 				
-				Usuario usuario = ApplicationContextLoad.getApplicationContext().
-						getBean(UsuarioRepository.class).
-						findUserByLogin(user);
-				
-				if(usuario != null) {
-					return new UsernamePasswordAuthenticationToken(
-							usuario.getLogin(), 
-							usuario.getPassword(), 
-							usuario.getAuthorities());
+				if(user != null) {
+					
+					/*Ajuda a consultar o usuario no banco de dados*/
+					Usuario usuario = ApplicationContextLoad.getApplicationContext().
+							getBean(UsuarioRepository.class).
+							findUserByLogin(user);
+					
+					if(usuario != null) {
+						return new UsernamePasswordAuthenticationToken(
+								usuario.getLogin(), 
+								usuario.getSenha(), 
+								usuario.getAuthorities());
+					}
 				}
+			}catch (Exception e) {
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Token inválido
+                return null;
 			}
 			
 		}
@@ -83,6 +90,7 @@ public class JWTTokenAutenticacaoService {
 		
 	}
 	
+	/*Esse erro de cors, não ocorre quando usado para testes de API, apenas com requisicoes WEB*/
 	private void libaracaoCors(HttpServletResponse response) {
 		
 		if(response.getHeader("Access-Control-Allow-Origin") == null) {
