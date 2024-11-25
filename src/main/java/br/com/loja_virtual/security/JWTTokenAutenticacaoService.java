@@ -1,5 +1,6 @@
 package br.com.loja_virtual.security;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +14,10 @@ import org.springframework.stereotype.Service;
 import br.com.loja_virtual.ApplicationContextLoad;
 import br.com.loja_virtual.model.Usuario;
 import br.com.loja_virtual.repository.UsuarioRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 
 @Service
 @Component
@@ -51,15 +54,16 @@ public class JWTTokenAutenticacaoService {
 	}
 	
 	/*Retorna o usuario validado com o token ou caso nao seja valido retorna null*/
-	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) {
+	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		String token = request.getHeader(HEADER_STRING);
-		
-		if(token != null) {
-			/*Retira o "Bearer" do inicio do token, devido ele precisar vim limpo*/
-			String tokenLimpo = token.replace(TOKEN_PREFIX, "").trim();
+		try {
 			
-			try {
+			if(token != null) {
+				/*Retira o "Bearer" do inicio do token, devido ele precisar vim limpo*/
+				String tokenLimpo = token.replace(TOKEN_PREFIX, "").trim();
+				
+				
 				/*Faz a validação do token do usuario na requisicao e obtem o USER*/
 				String user = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(tokenLimpo).getBody().getSubject();
 				
@@ -77,11 +81,18 @@ public class JWTTokenAutenticacaoService {
 								usuario.getAuthorities());
 					}
 				}
-			}catch (Exception e) {
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Token inválido
-                return null;
+				
 			}
+		
+		}catch (SignatureException e) {
+			response.getWriter().write("Token Invalido!");
+			//response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Token inválido
 			
+		}catch (ExpiredJwtException e) {
+			response.getWriter().write("Token Expirado!");
+			
+		}finally {
+			libaracaoCors(response);
 		}
 		
 		libaracaoCors(response);
