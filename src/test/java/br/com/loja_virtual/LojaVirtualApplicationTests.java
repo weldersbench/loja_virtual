@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.loja_virtual.controller.AcessoController;
 import br.com.loja_virtual.model.Acesso;
 import br.com.loja_virtual.repository.AcessoRepository;
-import br.com.loja_virtual.service.AcessoService;
 import junit.framework.TestCase;
 
 @SpringBootTest(classes = LojaVirtualApplication.class)
@@ -221,7 +220,7 @@ class LojaVirtualApplicationTests extends TestCase{
 	}
 
 	@Test
-	public void acessoCadastro() {
+	public void acessoCadastro() throws ExceptionNotValue {
 		
 		Acesso acesso = new Acesso();
 		

@@ -22,6 +22,17 @@ import br.com.loja_virtual.model.dto.ObjetoErroDTO;
 @ControllerAdvice
 public class ControleExcecoes extends ResponseEntityExceptionHandler{
 	
+	/*Monitora a exceção customizada, como é algo especifico, sempre retorna um status de OK, mas a msg de erro é exibida para o usuario*/
+	@ExceptionHandler(ExceptionNotValue.class)
+	public ResponseEntity<Object> handleExceptionCustom (ExceptionNotValue ex){
+		ObjetoErroDTO objetoErroDTO = new ObjetoErroDTO();
+		
+		objetoErroDTO.setError(ex.getMessage());
+		objetoErroDTO.setCode(HttpStatus.OK.toString());
+		
+		return new ResponseEntity<Object> (objetoErroDTO, HttpStatus.OK);
+	}
+	
 	/*Captura Excecoes do projeto*/
 	@ExceptionHandler({Exception.class, RuntimeException.class, Throwable.class})
 	@Override
@@ -49,6 +60,8 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler{
 		objetoErroDTO.setError(msg);
 		objetoErroDTO.setCode(status.value() + " ==> " + status.getReasonPhrase());
 		
+		/*Imprime no console*/
+		ex.printStackTrace();
 		
 		/*Retorno o erro na tela*/
 		return new ResponseEntity<Object>(objetoErroDTO, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -73,6 +86,11 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler{
 			msg = ex.getMessage();
 		}
 		
+		objetoErroDTO.setError(msg);
+		objetoErroDTO.setCode(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+		
+		/*Imprime no console*/
+		ex.printStackTrace();
 		
 		return new ResponseEntity<Object>(objetoErroDTO, HttpStatus.INTERNAL_SERVER_ERROR);
 	}

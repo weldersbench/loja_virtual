@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.loja_virtual.ExceptionNotValue;
 import br.com.loja_virtual.model.Acesso;
 import br.com.loja_virtual.service.AcessoService;
 
@@ -26,8 +27,14 @@ public class AcessoController {
 	
 	@ResponseBody /*Poder dar um retorno da API*/
 	@PostMapping("/salvarAcesso") /*Mapeia a URL para receber o JSON*/
-	public ResponseEntity<Acesso> salvarAcesso(@RequestBody Acesso acesso) { /*Recebe o JSON e converte para objeto*/
+	public ResponseEntity<Acesso> salvarAcesso(@RequestBody Acesso acesso) throws ExceptionNotValue { /*Recebe o JSON e converte para objeto*/
 		
+		if(acesso.getId() == null) {
+			List<Acesso>  acessos = acessoService.buscarPorDesc(acesso.getDescricao().toUpperCase());
+			if(!acessos.isEmpty()) {
+				throw new ExceptionNotValue("Já existe acesso com essa descrição " + acesso.getDescricao());
+			}
+		}
 		/*Chama o service para persistir os dados*/
 		Acesso acessosalvo = acessoService.save(acesso);
 		
@@ -58,10 +65,14 @@ public class AcessoController {
 	
 	@ResponseBody /*Poder dar um retorno da API*/
 	@GetMapping("/obterAcesso/{id}") /*Mapeia a URL para receber o JSON*/
-	public ResponseEntity<Acesso> obterAcesso(@PathVariable("id") Long id) { /*Recebe o JSON e converte para objeto*/
+	public ResponseEntity<Acesso> obterAcesso(@PathVariable("id") Long id) throws ExceptionNotValue { /*Recebe o JSON e converte para objeto*/
 		
 		/*Chama o service para persistir os dados*/
-		Acesso obterAcesso = acessoService.buscarAcesso(id);
+		Acesso obterAcesso = acessoService.obterAcesso(id);
+		
+		if(obterAcesso == null) {
+			throw new ExceptionNotValue("Não encontrou acesso com o código: " + id);
+		}
 		
 		return new ResponseEntity<Acesso>(obterAcesso, HttpStatus.OK); /*Retorna para o objeto Acesso, e o status como OK*/
 	}
@@ -70,7 +81,7 @@ public class AcessoController {
 	@GetMapping("/buscarPorDescricao/{desc}")
 	public ResponseEntity<List<Acesso>> buscarPorDescricao(@PathVariable("desc") String desc) {
 		
-		List<Acesso> buscarPorDescricao = acessoService.buscarPorDesc(desc);
+		List<Acesso> buscarPorDescricao = acessoService.buscarPorDesc(desc.toUpperCase());
 		
 		return new ResponseEntity<List<Acesso>>(buscarPorDescricao, HttpStatus.OK);
 	}

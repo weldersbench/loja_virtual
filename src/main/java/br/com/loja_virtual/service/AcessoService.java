@@ -32,8 +32,8 @@ public class AcessoService {
 		acessoRepository.deleteById(id);
 	}
 	
-	public Acesso buscarAcesso(Long id) {
-		return acessoRepository.findById(id).get();
+	public Acesso obterAcesso(Long id) {
+		return acessoRepository.findById(id).orElse(null);
 	}
 	
 	public List<Acesso> buscarPorDesc(String dec){
