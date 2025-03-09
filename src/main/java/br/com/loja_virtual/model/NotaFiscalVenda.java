@@ -3,17 +3,7 @@ package br.com.loja_virtual.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.ConstraintMode;
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "nota_fiscal_venda")
@@ -42,6 +32,11 @@ public class NotaFiscalVenda implements Serializable {
 	@JoinColumn(name = "venda_compra_loja_virtual_id", nullable = false, 
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "venda_compra_loja_virtual_fk"))
 	private VendaCompraLojaVirtual vendaCompraLojaVirtual;
+
+	@ManyToOne(targetEntity = Pessoa.class) // Muitos para 1, passando qual é a classe.
+	@JoinColumn(name = "empresa_id", nullable = false,
+			foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private Pessoa empresa;
 	
 	public VendaCompraLojaVirtual getVendaCompraLojaVirtual() {
 		return vendaCompraLojaVirtual;
@@ -50,7 +45,15 @@ public class NotaFiscalVenda implements Serializable {
 	public void setVendaCompraLojaVirtual(VendaCompraLojaVirtual vendaCompraLojaVirtual) {
 		this.vendaCompraLojaVirtual = vendaCompraLojaVirtual;
 	}
-	
+
+	public Pessoa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Pessoa empresa) {
+		this.empresa = empresa;
+	}
+
 	public Long getId() {
 		return id;
 	}

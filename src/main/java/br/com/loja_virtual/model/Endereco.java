@@ -51,11 +51,24 @@ public class Endereco implements Serializable{
 	@ManyToOne(targetEntity = Pessoa.class) // Muitos para 1, passando qual é a classe.
 	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk")) // Cria a chave estrangeira
 	private Pessoa pessoa;
+
+	@ManyToOne(targetEntity = Pessoa.class) // Muitos para 1, passando qual é a classe.
+	@JoinColumn(name = "empresa_id", nullable = false,
+			foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private Pessoa empresa;
 	
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING) // O jpa trabalho com a gravação com a descrição feita no enum.
 	private TipoEndereco tipoEndereco;
-	
+
+	public Pessoa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Pessoa empresa) {
+		this.empresa = empresa;
+	}
+
 	public void setTipoEndereco(TipoEndereco tipoEndereco) {
 		this.tipoEndereco = tipoEndereco;
 	}

@@ -61,6 +61,26 @@ public class ContaPagar implements Serializable{
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_forn_fk")) // Cria a chave estrangeira
 	private Pessoa pessoa_fornecedor;
 
+	@ManyToOne(targetEntity = Pessoa.class) // Muitos para 1, passando qual é a classe.
+	@JoinColumn(name = "empresa_id", nullable = false,
+			foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private Pessoa empresa;
+
+	public Pessoa getPessoa_fornecedor() {
+		return pessoa_fornecedor;
+	}
+
+	public void setPessoa_fornecedor(Pessoa pessoa_fornecedor) {
+		this.pessoa_fornecedor = pessoa_fornecedor;
+	}
+
+	public Pessoa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Pessoa empresa) {
+		this.empresa = empresa;
+	}
 
 	public StatusContaPagar getStatus() {
 		return status;

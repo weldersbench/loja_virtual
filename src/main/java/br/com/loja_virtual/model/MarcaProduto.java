@@ -3,13 +3,7 @@ package br.com.loja_virtual.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "marca_produto") // Indicar o nome da tabela.
@@ -20,10 +14,23 @@ public class MarcaProduto implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_marca_produto") // Define a estrategia do SequenceGenerator
 	private Long id;
+
+	@ManyToOne(targetEntity = Pessoa.class) // Muitos para 1, passando qual é a classe.
+	@JoinColumn(name = "empresa_id", nullable = false,
+			foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private Pessoa empresa;
 	
 	@Column(nullable = false) // Esse parametro define que o campo descrição produto não pode ser vazio ou null, obrigatorio preencher.
 	private String nomeDesc;
-	
+
+	public Pessoa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Pessoa empresa) {
+		this.empresa = empresa;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -45,6 +45,11 @@ public class Produto implements Serializable {
 	@JoinColumn(name = "nota_item_produto_id", nullable = false, 
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "nota_item_produto_fk"))
 	private NotaITemProduto notaItemProduto;
+
+	@ManyToOne(targetEntity = Pessoa.class) // Muitos para 1, passando qual é a classe.
+	@JoinColumn(name = "empresa_id", nullable = false,
+			foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private Pessoa empresa;
 	
 	@Column(nullable = false)
 	private Double peso;
@@ -62,7 +67,15 @@ public class Produto implements Serializable {
 	private String linkYoutube;
 	private Boolean alertaQtdEstoque = Boolean.FALSE;
 	private Integer qtdClique = 0;
-	
+
+	public Pessoa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Pessoa empresa) {
+		this.empresa = empresa;
+	}
+
 	public Boolean getAtivo() {
 		return ativo;
 	}
